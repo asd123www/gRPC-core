@@ -23,12 +23,17 @@
 #include <string>
 #include <vector>
 
+/* asd123www:
+ * Abseil is an open-source collection of C++ library code designed to augment the C++ standard library.
+ * You can find "absl/status/statusor.h" here: https://github.com/abseil/abseil-cpp/blob/master/absl/status/status.h.
+ * Looks like gRPC built upon this C++ lib.
+ */
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 
 namespace grpc_core {
 
-class URI {
+class URI { // URI: Uniform Resource Identifier, rfc 3986.
  public:
   struct QueryParam {
     std::string key;
@@ -43,10 +48,21 @@ class URI {
     }
   };
 
+  /* asd123www:
+   * absl::StatusOr<T>: returns either T object or "absl:Status", an error handling object.
+   * absl::string_view: read-only string, provide more safety.
+   */
   // Creates a URI by parsing an rfc3986 URI string. Returns an
   // InvalidArgumentError on failure.
   static absl::StatusOr<URI> Parse(absl::string_view uri_text);
   // Creates a URI from components. Returns an InvalidArgumentError on failure.
+  /* GPT-4:
+   * std::string scheme: The scheme component of the URI (like http, https, ftp).
+   * std::string authority: The authority component, typically including the user information, host, and port.
+   * std::string path: The path component of the URI.
+   * std::vector<QueryParam> query_parameter_pairs: A vector of query parameters. Each QueryParam is likely a structure or class representing a key-value pair for query parameters.
+   * std::string fragment: The fragment component of the URI, used to identify a secondary resource, like a section heading in a document.
+   */
   static absl::StatusOr<URI> Create(
       std::string scheme, std::string authority, std::string path,
       std::vector<QueryParam> query_parameter_pairs, std::string fragment);
@@ -60,11 +76,13 @@ class URI {
   URI(URI&&) = default;
   URI& operator=(URI&&) = default;
 
+  // asd123www: percent encoding, also known URL encoding.
   static std::string PercentEncodeAuthority(absl::string_view str);
   static std::string PercentEncodePath(absl::string_view str);
 
   static std::string PercentDecode(absl::string_view str);
 
+  // asd123www: insertion operator.
   const std::string& scheme() const { return scheme_; }
   const std::string& authority() const { return authority_; }
   const std::string& path() const { return path_; }
@@ -82,6 +100,8 @@ class URI {
     return query_parameter_pairs_;
   }
   const std::string& fragment() const { return fragment_; }
+
+
 
   std::string ToString() const;
 
