@@ -29,6 +29,11 @@
 
 namespace grpc_core {
 
+/* asd123www:
+ * The implementation of a self-balancing binary search tree called AVL.
+ * Data structure management.
+ */
+
 template <class K, class V = void>
 class AVL {
  public:
